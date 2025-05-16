@@ -1,0 +1,13 @@
+### Write statistics
+POST {{host}}/v1/statistics
+Content-Type: application/json
+
+{
+  "countryCode": "ru"
+}
+
+### Get country statistics
+GET {{host}}/v1/statistics
+Content-Type: application/json
+
+###
