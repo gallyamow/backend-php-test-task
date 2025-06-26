@@ -6,6 +6,14 @@ Content-Type: application/json
   "countryCode": "ru"
 }
 
+### Write statistics error
+POST {{host}}/v1/statistics
+Content-Type: application/json
+
+{
+  "countryCode": "wrong"
+}
+
 ### Get country statistics
 GET {{host}}/v1/statistics
 Content-Type: application/json
