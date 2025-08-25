@@ -13,7 +13,7 @@ Template for a lightweight PHP micro-service to record and expose per-country us
 Так как функциональность сервиса - небольшая (микросервис), то не буду использовать никаких фреймворков. Возьму
 предоставленный шаблон.
 
-Давно хотел познакомиться с проектом `roadrunner-server/roadrunner` - поэтому выберу его.
+Давно хотел познакомиться с решениями вида `roadrunner-server/roadrunner`, поэтому сделаю на его основе.
 Для роутинга буду использовать `league/route`, для redis - `phpredis`.
 
 **Результат load-tests**
