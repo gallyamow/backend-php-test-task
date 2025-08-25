@@ -1,0 +1,19 @@
+version: "3"
+
+server:
+  command: "php src/worker.php"
+
+http:
+  address: 0.0.0.0:8088
+  pool:
+    num_workers: 128
+    max_jobs: 1000
+    allocate_timeout: 60s
+    destroy_timeout: 60s
+
+logs:
+  level: warn
+  mode: development
+  encoding: json
+  output: "stderr"
+
