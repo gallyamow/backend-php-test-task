@@ -4,9 +4,9 @@ Template for a lightweight PHP micro-service to record and expose per-country us
 ## Solution
 
 Основная сложность этой задачи в том что нужно обеспечить атомарный инкремент показателей и быстрое чтение сразу всех
-показателей. К счастью в Redis уже есть и такая операция - `HINCRBY` и такой тип `HASH`.
+показателей без блокировок. К счастью в Redis уже есть и такая операция - `HINCRBY` и такой тип `HASH`.
 
-1. В Redis создаем значение с типом `HASH` и ключом `statistics_counter`.
+1. В Redis создаем значение с типом `HASH`.
 2. При обновлении статистики - используем `HINCRBY`
 3. При запросе статистики - используем `HGETALL`
 
@@ -15,6 +15,9 @@ Template for a lightweight PHP micro-service to record and expose per-country us
 
 Давно хотел познакомиться с решениями вида `roadrunner-server/roadrunner`, поэтому сделаю на его основе.
 Для роутинга буду использовать `league/route`, для redis - `phpredis`.
+
+Код не стал делить по директориям, потому что его мало (и не будет много). Интерфейс `CounterInterface` создал потому что 
+было интересно проверить с postgresql-хранилищем.
 
 **Результат load-tests**
 
@@ -41,6 +44,8 @@ Running 5s test @ http://localhost:8088/v1/statistics
 Requests/sec:  16573.27
 Transfer/sec:     26.89MB
 ```
+
+Если поставить nginx перед 2-мя backend - то можно линейно ускориться.
 
 ## Getting Started
 Build containers, install PHP dependencies, and start the stack:
