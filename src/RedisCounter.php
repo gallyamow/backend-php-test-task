@@ -55,6 +55,6 @@ class RedisCounter implements CounterInterface
             throw StorageException::failedToFound($this->storageKey);
         }
 
-        return $res;
+        return array_map('intval', $res);
     }
 }
