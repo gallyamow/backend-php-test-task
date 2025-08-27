@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\Internal;
 
 use App\Exception\StorageException;
 use Webmozart\Assert\Assert;

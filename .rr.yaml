@@ -1,7 +1,7 @@
 version: "3"
 
 server:
-  command: "php src/worker.php"
+  command: "php src/roadrunner-worker.php"
 
 http:
   address: 0.0.0.0:8088

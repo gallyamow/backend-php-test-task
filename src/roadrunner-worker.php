@@ -2,10 +2,10 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use App\BaseJsonLogger;
-use App\CountryCodeValidator;
 use App\Exception\AppExceptionInterface;
-use App\RedisCounter;
+use App\Internal\BaseJsonLogger;
+use App\Internal\CountryCodeValidator;
+use App\Internal\RedisCounter;
 use League\Route\Router;
 use Nyholm\Psr7;
 use Psr\Http\Message\ResponseInterface;
@@ -14,7 +14,7 @@ use Psr\Http\Server;
 use Psr\Log;
 use Spiral\RoadRunner;
 
-const CONTENT_TYPE_JSON = 'application/json';
+const RESPONSE_HEADERS = ['Content-Type' => 'application/json'];
 
 // configure counter
 $redisHost = getenv('REDIS_HOST');
@@ -50,7 +50,7 @@ $router->middleware(new class($logger) implements Server\MiddlewareInterface {
 
             return new Psr7\Response(
                 500,
-                ['Content-Type' => CONTENT_TYPE_JSON],
+                RESPONSE_HEADERS,
                 json_encode(['error' => $error], JSON_THROW_ON_ERROR)
             );
         } catch (Throwable $tr) {
@@ -59,7 +59,7 @@ $router->middleware(new class($logger) implements Server\MiddlewareInterface {
 
             return new Psr7\Response(
                 502,
-                ['Content-Type' => CONTENT_TYPE_JSON],
+                RESPONSE_HEADERS,
                 json_encode(['error' => $error], JSON_THROW_ON_ERROR)
             );
         }
@@ -69,8 +69,8 @@ $router->middleware(new class($logger) implements Server\MiddlewareInterface {
 $router->map('GET', '/', function (ServerRequestInterface $request, array $args) use ($counter): ResponseInterface {
     return new Psr7\Response(
         200,
-        ['Content-Type' => CONTENT_TYPE_JSON],
-        json_encode(['health' => 'good'], JSON_THROW_ON_ERROR)
+        RESPONSE_HEADERS,
+        json_encode(['health' => 'good', 'server' => 'roadrunner'], JSON_THROW_ON_ERROR)
     );
 });
 
@@ -79,7 +79,7 @@ $router->map('GET', '/v1/statistics', function (ServerRequestInterface $request,
 
     return new Psr7\Response(
         200,
-        ['Content-Type' => CONTENT_TYPE_JSON],
+        RESPONSE_HEADERS,
         json_encode($body, JSON_THROW_ON_ERROR)
     );
 });
@@ -94,7 +94,7 @@ $router->map('POST', '/v1/statistics', function (ServerRequestInterface $request
 
     return new Psr7\Response(
         201,
-        ['Content-Type' => CONTENT_TYPE_JSON],
+        RESPONSE_HEADERS,
         null
     );
 });

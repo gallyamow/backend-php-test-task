@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests;
 
 use App\Exception\StorageException;
-use App\RedisCounter;
+use App\Internal\RedisCounter;
 use PHPUnit\Framework\TestCase;
 use Redis;
 use RedisException;

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\Internal;
 
-use \Psr\Log;
+use Psr\Log;
 
 final class BaseJsonLogger extends Log\AbstractLogger
 {

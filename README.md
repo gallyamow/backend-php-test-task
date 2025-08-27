@@ -1,25 +1,11 @@
-# Statistics API
-Template for a lightweight PHP micro-service to record and expose per-country usage statistics.
+# Modern PHP servers' benchmark
 
-## Solution
+A microservice that records and exposes per-country usage statistics will be run on several model app servers such as:
 
-Основная сложность этой задачи в том что нужно обеспечить атомарный инкремент показателей и быстрое чтение сразу всех
-показателей без блокировок. К счастью в Redis уже есть и такая операция - `HINCRBY` и такой тип `HASH`.
+- `spiral/roadrunner-http` on 8088
+- `php/frankenphp` on 8089
 
-1. В Redis создаем значение с типом `HASH`.
-2. При обновлении статистики - используем `HINCRBY`
-3. При запросе статистики - используем `HGETALL`
-
-Так как функциональность сервиса - небольшая (микросервис), то не буду использовать никаких фреймворков. Возьму
-предоставленный шаблон.
-
-Давно хотел познакомиться с решениями вида `roadrunner-server/roadrunner`, поэтому сделаю на его основе.
-Для роутинга буду использовать `league/route`, для redis - `phpredis`.
-
-Код не стал делить по директориям, потому что его мало (и не будет много). Интерфейс `CounterInterface` создал потому что 
-было интересно проверить с postgresql-хранилищем.
-
-**Результат load-tests**
+**Roadrunner results:**
 
 ```
 ### load-test-post
@@ -45,56 +31,13 @@ Requests/sec:  16573.27
 Transfer/sec:     26.89MB
 ```
 
-Если поставить nginx перед 2-мя backend - то можно линейно ускориться.
+## USAGE
 
-## Getting Started
 Build containers, install PHP dependencies, and start the stack:
 
 ```bash
 make up
-```
-
-## Endpoints
-
-### Update Statistics
-
-```bash
-curl -X POST http://127.0.0.1:8088/v1/statistics \
-     -H "Content-Type: application/json" \
-     -d '{"countryCode": "ru"}'
-```
-Response:
-```
-201 Created
-```
-
-### Get Country Statistics
-
-```bash
-curl -X GET http://127.0.0.1:8088/v1/statistics \
-     -H "Content-Type: application/json"
-```
-Response:
-```json
-{
-  "ru": 813,
-  "us": 456,
-  "it": 92,
-  "de": 17,
-  "cy": 123
-}
-```
-
-## Run Unit Tests
-Execute the full PHPUnit suite:
-
-```bash
 make unit-test
-```
-
-
-## Run Load Tests
-
-```bash
 make load-test
 ```
+
