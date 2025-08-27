@@ -1,6 +1,9 @@
 <?php
 declare(strict_types=1);
 
+// Prevent worker script termination when a client connection is interrupted
+ignore_user_abort(true);
+
 require __DIR__ . '/../vendor/autoload.php';
 
 use App\Exception\AppExceptionInterface;
@@ -9,11 +12,12 @@ use App\Internal\CountryCodeValidator;
 use App\Internal\RedisCounter;
 use League\Route\Router;
 use Nyholm\Psr7;
+use Nyholm\Psr7Server;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server;
 use Psr\Log;
-use Spiral\RoadRunner;
+use Laminas\HttpHandlerRunner\Emitter;
 
 const RESPONSE_HEADERS = ['Content-Type' => 'application/json'];
 
@@ -25,7 +29,7 @@ $redisStorageKey = getenv('REDIS_STORAGE_KEY');
 $counter = new RedisCounter(new Redis(), $redisHost, $redisPort, $redisStorageKey);
 
 // configure logger
-$logger = new BaseJsonLogger(\STDERR);
+$logger = new BaseJsonLogger('php://stdout');
 
 // configure validator
 $validator = new CountryCodeValidator();
@@ -100,15 +104,33 @@ $router->map('POST', '/v1/statistics', function (ServerRequestInterface $request
     );
 });
 
+
 // configure roadrunner
 $psr17Factory = new Psr7\Factory\Psr17Factory();
-$rrWorker = new RoadRunner\Http\PSR7Worker(RoadRunner\Worker::create(), $psr17Factory, $psr17Factory, $psr17Factory);
+$psr7Creator = new Psr7Server\ServerRequestCreator(
+    $psr17Factory,
+    $psr17Factory,
+    $psr17Factory,
+    $psr17Factory
+);
+$sapiEmitter = new Emitter\SapiEmitter();
 
-while ($req = $rrWorker->waitRequest()) {
-    try {
-        $resp = $router->dispatch($req);
-        $rrWorker->respond($resp);
-    } catch (\Throwable $e) {
-        $rrWorker->getWorker()->error((string)$e);
+// Handler outside the loop for better performance (doing less work)
+$handler = static function () use ($psr7Creator, $sapiEmitter, $router) {
+    $req = $psr7Creator->fromGlobals();
+    $resp = $router->dispatch($req);
+    $sapiEmitter->emit($resp);
+};
+
+$maxRequests = (int)($_SERVER['MAX_REQUESTS'] ?? 0);
+for ($nbRequests = 0; !$maxRequests || $nbRequests < $maxRequests; ++$nbRequests) {
+    $keepRunning = \frankenphp_handle_request($handler);
+
+    // Call the garbage collector to reduce the chances of it being triggered in the middle of a page generation
+    gc_collect_cycles();
+
+    if (!$keepRunning) {
+        break;
     }
 }
+

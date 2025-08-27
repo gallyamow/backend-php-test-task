@@ -10,10 +10,10 @@ final class BaseJsonLogger extends Log\AbstractLogger
 {
     private mixed $outputStream;
 
-    public function __construct(mixed $outputStream = null)
+    public function __construct(mixed $outputStream)
     {
         // @see https://docs.roadrunner.dev/docs/error-codes/stdout-crc
-        $this->outputStream = STDERR;
+        $this->outputStream = $outputStream;
     }
 
     public function log($level, \Stringable|string $message, array $context = []): void

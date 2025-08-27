@@ -15,10 +15,18 @@
         "webmozart/assert": "^1.11",
         "ext-redis": "*",
         "spiral/roadrunner-http": "^3.5",
-        "psr/log": "^3.0"
+        "psr/log": "^3.0",
+        "runtime/frankenphp-symfony": "^0.2.0",
+        "nyholm/psr7-server": "^1.1",
+        "laminas/laminas-httphandlerrunner": "^2.12"
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest",
         "phpunit/phpunit": "^12.3"
+    },
+    "config": {
+        "allow-plugins": {
+            "symfony/runtime": true
+        }
     }
 }

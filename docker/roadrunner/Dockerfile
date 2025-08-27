@@ -20,6 +20,6 @@ COPY --from=roadrunner_builder /usr/bin/rr /usr/local/bin/rr
 WORKDIR /app
 COPY . /app
 
-EXPOSE 8088
+EXPOSE 8080
 
 CMD ["rr", "serve", "-c", ".rr.yaml"]
