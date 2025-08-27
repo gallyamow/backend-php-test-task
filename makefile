@@ -2,8 +2,8 @@ roadrunnerUrl = http://localhost:8088/v1/statistics
 frankenphpUrl = http://localhost:8089/v1/statistics
 
 wrkImage = elswork/wrk
-wrkCommand = docker run --rm --network="host" --volume $(CURDIR):/wrk -w /wrk $(wrkImage) -t12 -c20 -d5s
-composerCommand = docker run --rm --volume $(CURDIR):/app --interactive composer:latest composer
+wrkCommand = docker run --rm --network="host" --volume $pwd:/wrk -w /wrk $(wrkImage) -t12 -c20 -d5s
+composerCommand = docker run --rm --volume $PWD:/app --interactive composer:latest composer
 up: composer-install
 	docker compose up -d --build
 
