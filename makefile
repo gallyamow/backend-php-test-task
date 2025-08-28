@@ -4,6 +4,7 @@ frankenphpUrl = http://localhost:8089/v1/statistics
 wrkImage = elswork/wrk
 wrkCommand = docker run --rm --network="host" --volume ${CURDIR}:/wrk -w /wrk $(wrkImage) -t12 -c20 -d5s
 composerCommand = docker run --rm --volume ${CURDIR}:/app --interactive composer:latest composer
+
 up: composer-install
 	docker compose up -d --build
 

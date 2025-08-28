@@ -13,11 +13,8 @@ RUN docker-php-ext-install \
 
 RUN pecl install redis && docker-php-ext-enable redis
 
-ENV FRANKENPHP_CONFIG="worker ./src/frankenphp-worker.php 32"
-
 WORKDIR /app
 COPY . /app
 
-EXPOSE 8080
-
-CMD [ "frankenphp", "run" ]
+ENV FRANKENPHP_CONFIG="worker /app/src/frankenphp-worker.php 2"
+ENV SERVER_NAME=:80

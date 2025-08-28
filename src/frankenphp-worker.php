@@ -122,6 +122,7 @@ $handler = static function () use ($psr7Creator, $sapiEmitter, $router) {
     $sapiEmitter->emit($resp);
 };
 
+
 $maxRequests = (int)($_SERVER['MAX_REQUESTS'] ?? 0);
 for ($nbRequests = 0; !$maxRequests || $nbRequests < $maxRequests; ++$nbRequests) {
     $keepRunning = \frankenphp_handle_request($handler);
