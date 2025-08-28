@@ -4,7 +4,7 @@ server:
   command: "php src/roadrunner-worker.php"
 
 http:
-  address: 0.0.0.0:8088
+  address: 0.0.0.0:8080
   pool:
     num_workers: 32
     max_jobs: 10000

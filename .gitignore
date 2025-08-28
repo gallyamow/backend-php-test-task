@@ -48,6 +48,5 @@ coverage/
 secrets/
 
 # PHP
-composer.lock
 .phpunit.result.cache
 *.php_cs.cache
