@@ -36,5 +36,7 @@ load-test-post: wrk-pull
 	$(wrkCommand) -s ./tests/load/countries.lua $(frankenphpUrl)
 
 load-test-get: wrk-pull
+	@echo ">>> ============ roadrunner ============ <<<"
 	$(wrkCommand) $(roadrunnerUrl)
+	@echo ">>> ============ frankenphp ============ <<<"
 	$(wrkCommand) $(frankenphpUrl)

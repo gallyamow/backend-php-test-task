@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 // Prevent worker script termination when a client connection is interrupted
@@ -75,7 +76,7 @@ $router->map('GET', '/', function (ServerRequestInterface $request, array $args)
     return new Psr7\Response(
         200,
         RESPONSE_HEADERS,
-        json_encode(['health' => 'good', 'server' => 'frankenphp-worker'], JSON_THROW_ON_ERROR)
+        json_encode(['health' => 'good', 'server' => 'frankenphp'], JSON_THROW_ON_ERROR)
     );
 });
 
@@ -115,23 +116,6 @@ $psr7Creator = new Psr7Server\ServerRequestCreator(
 );
 $sapiEmitter = new Emitter\SapiEmitter();
 
-// Handler outside the loop for better performance (doing less work)
-$handler = static function () use ($psr7Creator, $sapiEmitter, $router) {
-    $req = $psr7Creator->fromGlobals();
-    $resp = $router->dispatch($req);
-    $sapiEmitter->emit($resp);
-};
-
-
-$maxRequests = (int)($_SERVER['MAX_REQUESTS'] ?? 0);
-for ($nbRequests = 0; !$maxRequests || $nbRequests < $maxRequests; ++$nbRequests) {
-    $keepRunning = \frankenphp_handle_request($handler);
-
-    // Call the garbage collector to reduce the chances of it being triggered in the middle of a page generation
-    gc_collect_cycles();
-
-    if (!$keepRunning) {
-        break;
-    }
-}
-
+$req = $psr7Creator->fromGlobals();
+$resp = $router->dispatch($req);
+$sapiEmitter->emit($resp);
