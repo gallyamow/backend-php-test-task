@@ -8,7 +8,7 @@ up: composer-install
 	docker compose up -d --build
 
 down:
-	docker compose stop
+	docker compose down
 
 ps:
 	docker compose ps
