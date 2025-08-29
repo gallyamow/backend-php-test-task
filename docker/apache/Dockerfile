@@ -1,4 +1,4 @@
-FROM dunglas/frankenphp
+FROM php:8.2-apache
 
 RUN apt-get update && apt-get install -y \
     unzip \
@@ -13,8 +13,9 @@ RUN docker-php-ext-install \
 
 RUN pecl install redis && docker-php-ext-enable redis
 
-#WORKDIR /app
-#COPY . /app
+#WORKDIR /var/www/html/
+#COPY . /var/www/html/
 
-ENV FRANKENPHP_CONFIG="worker /app/src/frankenphp-worker.php 2"
-ENV SERVER_NAME=:80
+RUN a2enmod rewrite
+
+RUN chown -R www-data:www-data /var/www/html

@@ -1,4 +1,42 @@
 services:
+  apache:
+    build:
+      context: .
+      dockerfile: docker/apache/Dockerfile
+    volumes:
+      - ./:/var/www
+      - ./public:/var/www/html
+    depends_on:
+      - redis
+    ports:
+      - "8086:80"
+    environment:
+      - SERVER_TYPE=apache
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_STORAGE_KEY=statistics_counter
+  nginx:
+    image: nginx:stable
+    depends_on:
+      - php-fpm
+    volumes:
+      - ./:/app
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "8087:80"
+  php-fpm:
+    build:
+      context: .
+      dockerfile: docker/php-fpm/Dockerfile
+    volumes:
+      - ./:/app
+    depends_on:
+      - redis
+    environment:
+      - SERVER_TYPE=php-fpm
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_STORAGE_KEY=statistics_counter
   roadrunner:
     build:
       context: .
@@ -11,6 +49,7 @@ services:
     depends_on:
       - redis
     environment:
+      - SERVER_TYPE=roadrunner
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - REDIS_STORAGE_KEY=statistics_counter
@@ -26,6 +65,7 @@ services:
     depends_on:
       - redis
     environment:
+      - SERVER_TYPE=frankenphp
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - REDIS_STORAGE_KEY=statistics_counter

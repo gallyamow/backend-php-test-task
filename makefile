@@ -1,3 +1,5 @@
+apacheUrl = http://localhost:8086/v1/statistics
+fmpUrl = http://localhost:8087/v1/statistics
 roadrunnerUrl = http://localhost:8088/v1/statistics
 frankenphpUrl = http://localhost:8089/v1/statistics
 
@@ -32,10 +34,20 @@ wrk-pull:
 	docker pull $(wrkImage)
 
 load-test-post: wrk-pull
+	@echo ">>> ============ apache + mod_php ============ <<<"
+	$(wrkCommand) -s ./tests/load/countries.lua $(apacheUrl)
+	@echo ">>> ============ nginx + fpm-fpm ============ <<<"
+	$(wrkCommand) -s ./tests/load/countries.lua $(fmpUrl)
+	@echo ">>> ============ roadrunner ============ <<<"
 	$(wrkCommand) -s ./tests/load/countries.lua $(roadrunnerUrl)
+	@echo ">>> ============ frankenphp ============ <<<"
 	$(wrkCommand) -s ./tests/load/countries.lua $(frankenphpUrl)
 
 load-test-get: wrk-pull
+	@echo ">>> ============ apache + mod_php ============ <<<"
+	$(wrkCommand) $(apacheUrl)
+	@echo ">>> ============ nginx + fpm-fpm ============ <<<"
+	$(wrkCommand) $(fmpUrl)
 	@echo ">>> ============ roadrunner ============ <<<"
 	$(wrkCommand) $(roadrunnerUrl)
 	@echo ">>> ============ frankenphp ============ <<<"

@@ -11,13 +11,14 @@ use App\Internal\RequestHandler;
 use Nyholm\Psr7;
 use Spiral\RoadRunner;
 
+$serverType = getenv('SERVER_TYPE');
 $redisHost = getenv('REDIS_HOST');
 $redisPort = (int)getenv('REDIS_PORT');
 $redisStorageKey = getenv('REDIS_STORAGE_KEY');
 
 // configure request handler
 $handler = new RequestHandler(
-    'roadrunner-worker',
+    $serverType,
     new RedisCounter(new Redis(), $redisHost, $redisPort, $redisStorageKey),
     new BaseJsonLogger('php://stderr'),
     new CountryCodeValidator()

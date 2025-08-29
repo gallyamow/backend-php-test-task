@@ -2,8 +2,12 @@
 
 A microservice that records and exposes per-country usage statistics will be run on several model app servers such as:
 
-- `spiral/roadrunner-http` on 8088
-- `php/frankenphp` on 8089
+- `apache + mod php` on http://localhost:8086/
+- `nginx + php-fpm` on http://localhost:8087/
+- `spiral/roadrunner-http` on http://localhost:8088/
+- `php/frankenphp` on http://localhost:8089/
+- `python fast-api + Uvicorn` vs Tornado
+- `golang gin gonic`
 
 **Roadrunner results:**
 

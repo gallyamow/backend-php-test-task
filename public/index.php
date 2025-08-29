@@ -15,13 +15,14 @@ use Laminas\HttpHandlerRunner\Emitter;
 use Nyholm\Psr7;
 use Nyholm\Psr7Server;
 
+$serverType = getenv('SERVER_TYPE');
 $redisHost = getenv('REDIS_HOST');
 $redisPort = (int)getenv('REDIS_PORT');
 $redisStorageKey = getenv('REDIS_STORAGE_KEY');
 
 // configure request handler
 $handler = new RequestHandler(
-    'index',
+    $serverType,
     new RedisCounter(new Redis(), $redisHost, $redisPort, $redisStorageKey),
     new BaseJsonLogger('php://stderr'),
     new CountryCodeValidator()
