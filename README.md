@@ -1,6 +1,6 @@
 # Modern PHP servers' benchmark
 
-A microservice that records and exposes per-country usage statistics will be run on several model app servers such as:
+A microservice that records and exposes per-country usage statistics will be run on several servers such as:
 
 - `apache + mod php` on http://localhost:8086/
 - `nginx + php-fpm` on http://localhost:8087/
