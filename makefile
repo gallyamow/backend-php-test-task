@@ -2,6 +2,7 @@ apacheUrl = http://localhost:8086/v1/statistics
 fmpUrl = http://localhost:8087/v1/statistics
 roadrunnerUrl = http://localhost:8088/v1/statistics
 frankenphpUrl = http://localhost:8089/v1/statistics
+fastapiUrl = http://localhost:8090/v1/statistics
 
 wrkImage = elswork/wrk
 wrkCommand = docker run --rm --network="host" --volume ${CURDIR}:/wrk -w /wrk $(wrkImage) -t12 -c20 -d5s
@@ -42,6 +43,8 @@ load-test-post: wrk-pull
 	$(wrkCommand) -s ./tests/load/countries.lua $(roadrunnerUrl)
 	@echo ">>> ============ frankenphp ============ <<<"
 	$(wrkCommand) -s ./tests/load/countries.lua $(frankenphpUrl)
+	@echo ">>> ============ fastapi ============ <<<"
+	$(wrkCommand) -s ./tests/load/countries.lua $(fastapiUrl)
 
 load-test-get: wrk-pull
 	@echo ">>> ============ apache + mod_php ============ <<<"
@@ -52,3 +55,5 @@ load-test-get: wrk-pull
 	$(wrkCommand) $(roadrunnerUrl)
 	@echo ">>> ============ frankenphp ============ <<<"
 	$(wrkCommand) $(frankenphpUrl)
+	@echo ">>> ============ fastapi ============ <<<"
+	$(wrkCommand) $(fastapiUrl)
