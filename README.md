@@ -6,8 +6,10 @@ A microservice that records and exposes per-country usage statistics will be run
 - `nginx + php-fpm` on http://localhost:8087/
 - `spiral/roadrunner-http` on http://localhost:8088/
 - `php/frankenphp` on http://localhost:8089/
-- `python FastApi + Uvicorn vs Tornado` 
+- `fastapi/fastapi` on on http://localhost:8090/ 
+- `Tornado vs Flask + Gunicorn` 
 - `golang gin gonic`
+- `NodeJS express`
 
 **Results:**
 
