@@ -14,11 +14,6 @@ A microservice that records and exposes per-country usage statistics will be run
 **Results:**
 
 This is not final results there are lack of some tuning.
-# Сравнение производительности PHP-серверов
-
-Результаты нагрузочного тестирования различных конфигураций PHP-серверов.
-
-## Результаты RPS (Requests Per Second)
 
 | Server          | WRITE    | READ     |
 |-----------------|----------|----------|
