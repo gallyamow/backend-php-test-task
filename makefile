@@ -35,25 +35,25 @@ wrk-pull:
 	docker pull $(wrkImage)
 
 load-test-post: wrk-pull
-	@echo ">>> ============ apache + mod_php ============ <<<"
+	@echo ">>> ============ WRITE apache + mod_php ============ <<<"
 	$(wrkCommand) -s ./tests/load/countries.lua $(apacheUrl)
-	@echo ">>> ============ nginx + fpm-fpm ============ <<<"
+	@echo ">>> ============ WRITE nginx + fpm-fpm ============ <<<"
 	$(wrkCommand) -s ./tests/load/countries.lua $(fmpUrl)
-	@echo ">>> ============ roadrunner ============ <<<"
+	@echo ">>> ============ WRITE roadrunner ============ <<<"
 	$(wrkCommand) -s ./tests/load/countries.lua $(roadrunnerUrl)
-	@echo ">>> ============ frankenphp ============ <<<"
+	@echo ">>> ============ WRITE frankenphp ============ <<<"
 	$(wrkCommand) -s ./tests/load/countries.lua $(frankenphpUrl)
-	@echo ">>> ============ fastapi ============ <<<"
+	@echo ">>> ============ WRITE fastapi ============ <<<"
 	$(wrkCommand) -s ./tests/load/countries.lua $(fastapiUrl)
 
 load-test-get: wrk-pull
-	@echo ">>> ============ apache + mod_php ============ <<<"
+	@echo ">>> ============ READ apache + mod_php ============ <<<"
 	$(wrkCommand) $(apacheUrl)
-	@echo ">>> ============ nginx + fpm-fpm ============ <<<"
+	@echo ">>> ============ READ nginx + fpm-fpm ============ <<<"
 	$(wrkCommand) $(fmpUrl)
-	@echo ">>> ============ roadrunner ============ <<<"
+	@echo ">>> ============ READ roadrunner ============ <<<"
 	$(wrkCommand) $(roadrunnerUrl)
-	@echo ">>> ============ frankenphp ============ <<<"
+	@echo ">>> ============ READ frankenphp ============ <<<"
 	$(wrkCommand) $(frankenphpUrl)
-	@echo ">>> ============ fastapi ============ <<<"
+	@echo ">>> ============READ fastapi ============ <<<"
 	$(wrkCommand) $(fastapiUrl)

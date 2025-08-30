@@ -7,6 +7,7 @@ services:
       - ./vendor:/var/www/vendor
       - ./src:/var/www/src
       - ./src/index.php:/var/www/html/index.php
+      - ./docker/apache/.htaccess:/var/www/html/.htaccess
     depends_on:
       - redis
     ports:
