@@ -104,6 +104,22 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - REDIS_STORAGE_KEY=visits_gin
+  fastify:
+    build:
+      context: .
+      dockerfile: docker/fastify/Dockerfile
+    volumes:
+      - ./node_modules:/app/node_modules
+      - ./src/fastify-index.js:/app/index.js
+    depends_on:
+      - redis
+    ports:
+      - "8093:8080"
+    environment:
+      - SERVER_TYPE=fastify
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_STORAGE_KEY=visits_fastify
   redis:
     image: redis:8.0.1
     ports:

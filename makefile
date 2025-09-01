@@ -4,6 +4,7 @@ roadrunnerUrl = http://localhost:8088/v1/statistics
 frankenphpUrl = http://localhost:8089/v1/statistics
 fastapiUrl = http://localhost:8090/v1/statistics
 ginUrl = http://localhost:8092/v1/statistics
+fastifyUrl = http://localhost:8093/v1/statistics
 
 wrkImage = elswork/wrk
 wrkCommand = docker run --rm --network="host" --volume ${CURDIR}:/wrk -w /wrk $(wrkImage) -t12 -c20 -d5s
@@ -37,9 +38,9 @@ wrk-pull:
 
 load-test-post-last:
 	@echo ">>> ============ WRITE last ============ <<<"
-	$(wrkCommand) $(ginUrl)
+	$(wrkCommand) $(fastifyUrl)
 	@echo ">>> ============ READ last ============ <<<"
-	$(wrkCommand) -s ./tests/load/countries.lua $(ginUrl)
+	$(wrkCommand) -s ./tests/load/countries.lua $(fastifyUrl)
 
 load-test-post: wrk-pull
 	@echo ">>> ============ WRITE apache + mod_php ============ <<<"
@@ -54,6 +55,8 @@ load-test-post: wrk-pull
 	$(wrkCommand) -s ./tests/load/countries.lua $(fastapiUrl)
 	@echo ">>> ============ WRITE gin ============ <<<"
 	$(wrkCommand) -s ./tests/load/countries.lua $(ginUrl)
+	@echo ">>> ============READ fastify ============ <<<"
+	$(wrkCommand) -s ./tests/load/countries.lua $(fastifyUrl)
 
 load-test-get: wrk-pull
 	@echo ">>> ============ READ apache + mod_php ============ <<<"
@@ -68,3 +71,5 @@ load-test-get: wrk-pull
 	$(wrkCommand) $(fastapiUrl)
 	@echo ">>> ============READ gin ============ <<<"
 	$(wrkCommand) $(ginUrl)
+	@echo ">>> ============READ fastify ============ <<<"
+	$(wrkCommand) $(fastifyUrl)
