@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: docker/apache/Dockerfile
+    # volumes are convenient to use for interpreted languages
     volumes:
       - ./vendor:/var/www/vendor
       - ./src:/var/www/src
@@ -16,7 +17,7 @@ services:
       - SERVER_TYPE=apache
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - REDIS_STORAGE_KEY=statistics_counter
+      - REDIS_STORAGE_KEY=visits_apache
   nginx:
     image: nginx:stable
     depends_on:
@@ -39,7 +40,7 @@ services:
       - SERVER_TYPE=php-fpm
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - REDIS_STORAGE_KEY=statistics_counter
+      - REDIS_STORAGE_KEY=visits_php-fpm
   roadrunner:
     build:
       context: .
@@ -56,7 +57,7 @@ services:
       - SERVER_TYPE=roadrunner
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - REDIS_STORAGE_KEY=statistics_counter
+      - REDIS_STORAGE_KEY=visits_roadrunner
   frankenphp:
     build:
       context: .
@@ -73,7 +74,7 @@ services:
       - SERVER_TYPE=frankenphp
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - REDIS_STORAGE_KEY=statistics_counter
+      - REDIS_STORAGE_KEY=visits_frankenphp
   fastapi:
     build:
       context: .
@@ -89,7 +90,20 @@ services:
       - SERVER_TYPE=fastapi
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - REDIS_STORAGE_KEY=statistics_counter
+      - REDIS_STORAGE_KEY=visits_fastapi
+  gin:
+    build:
+      context: .
+      dockerfile: docker/gin-gonic/Dockerfile
+    depends_on:
+      - redis
+    ports:
+      - "8092:8080"
+    environment:
+      - SERVER_TYPE=gin
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_STORAGE_KEY=visits_gin
   redis:
     image: redis:8.0.1
     ports:
