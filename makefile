@@ -7,7 +7,7 @@ ginUrl = http://localhost:8092/v1/statistics
 fastifyUrl = http://localhost:8093/v1/statistics
 
 wrkImage = elswork/wrk
-wrkCommand = docker run --rm --network="host" --volume ${CURDIR}:/wrk -w /wrk $(wrkImage) -t12 -c20 -d5s
+wrkCommand = docker run --rm --network="host" --volume ${CURDIR}:/wrk -w /wrk $(wrkImage) -t12 -c20 -d5s --latency
 composerCommand = docker run --rm --volume ${CURDIR}:/app --interactive composer:latest composer
 
 up: composer-install
@@ -31,45 +31,20 @@ composer-update:
 unit-test:
 	docker compose run --rm app ./vendor/bin/phpunit --testdox tests
 
-load-test-all: load-test-post load-test-get
-
 wrk-pull:
 	docker pull $(wrkImage)
 
+load-test-all: wrk-pull
+	make load-test port=8086
+	make load-test port=8087
+	make load-test port=8088
+	make load-test port=8089
+	make load-test port=8090
+	make load-test port=8092
+	make load-test port=8093
+
 load-test:
-	@echo ">>> ============ WRITE ============ <<<"
+	@echo ">>> ============ WRITE $(port) ============ <<<"
 	$(wrkCommand) http://localhost:$(port)/v1/statistics
-	@echo ">>> ============ READ ============ <<<"
+	@echo ">>> ============ READ $(port) ============ <<<"
 	$(wrkCommand) -s ./tests/load/countries.lua http://localhost:$(port)/v1/statistics
-
-load-test-post: wrk-pull
-	@echo ">>> ============ WRITE apache + mod_php ============ <<<"
-	$(wrkCommand) -s ./tests/load/countries.lua $(apacheUrl)
-	@echo ">>> ============ WRITE nginx + fpm-fpm ============ <<<"
-	$(wrkCommand) -s ./tests/load/countries.lua $(fmpUrl)
-	@echo ">>> ============ WRITE roadrunner ============ <<<"
-	$(wrkCommand) -s ./tests/load/countries.lua $(roadrunnerUrl)
-	@echo ">>> ============ WRITE frankenphp ============ <<<"
-	$(wrkCommand) -s ./tests/load/countries.lua $(frankenphpUrl)
-	@echo ">>> ============ WRITE fastapi ============ <<<"
-	$(wrkCommand) -s ./tests/load/countries.lua $(fastapiUrl)
-	@echo ">>> ============ WRITE gin ============ <<<"
-	$(wrkCommand) -s ./tests/load/countries.lua $(ginUrl)
-	@echo ">>> ============READ fastify ============ <<<"
-	$(wrkCommand) -s ./tests/load/countries.lua $(fastifyUrl)
-
-load-test-get: wrk-pull
-	@echo ">>> ============ READ apache + mod_php ============ <<<"
-	$(wrkCommand) $(apacheUrl)
-	@echo ">>> ============ READ nginx + fpm-fpm ============ <<<"
-	$(wrkCommand) $(fmpUrl)
-	@echo ">>> ============ READ roadrunner ============ <<<"
-	$(wrkCommand) $(roadrunnerUrl)
-	@echo ">>> ============ READ frankenphp ============ <<<"
-	$(wrkCommand) $(frankenphpUrl)
-	@echo ">>> ============READ fastapi ============ <<<"
-	$(wrkCommand) $(fastapiUrl)
-	@echo ">>> ============READ gin ============ <<<"
-	$(wrkCommand) $(ginUrl)
-	@echo ">>> ============READ fastify ============ <<<"
-	$(wrkCommand) $(fastifyUrl)
