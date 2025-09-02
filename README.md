@@ -11,19 +11,19 @@ A microservice that records and exposes per-country usage statistics will be run
 - `golang: gin gonic` on http://localhost:8092/v1/statistics
 - `nodejs: fastify` on http://localhost:8093/v1/statistics
 
-**Results:*8093
+**Results:**
 
 This is not final results there are lack of some tuning.
 
-| Server              | WRITE    | READ      |
-|---------------------|----------|-----------|
-| php: apache+mod_php | 2670.65  | 2744.76   |
-| php: nginx+fpm      | 6694.33  | 5985.75   |
-| php: roadrunner     | 15363.60 | 13876.69  |
-| php: frankenphp     | 1962.47  | 2436.10   |
-| python: fastapi     | 247.10   | 7634.92   |
-| golang: gin-gonic   | 47063.31 | 45043.10  |
-| nodejs: fastify     | 29821.35 | 20990.24  |
+| Server              | WRITE    | READ     |
+|---------------------|----------|----------|
+| php: apache+mod_php | 2508.89  | 2904.01  |
+| php: nginx+fpm      | 6020.13  | 6305.22  |
+| php: roadrunner     | 15524.43 | 16649.91 |
+| php: frankenphp     | 2278.72  | 2664.04  |
+| python: fastapi     | 14476.52 | 762.28   |
+| golang: gin-gonic   | 44931.60 | 23433.03 |
+| nodejs: fastify     | 17986.04 | 8790.46  |
 
 ## USAGE
 

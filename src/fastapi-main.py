@@ -1,3 +1,4 @@
+import asyncio
 import os
 from typing import Union
 from fastapi import FastAPI, Response, status
@@ -29,8 +30,22 @@ async def index():
 @app.get("/v1/statistics")
 async def read_statistics(q: Union[str, None] = None):
     stats = await async_redis.hgetall(REDIS_STORAGE_KEY)
-    return {key: int(value) for key, value in stats.items()}
 
+    # move cpu bound ops to separate thread
+    # read - 386.97 rps
+    # return await asyncio.to_thread(
+    #     lambda: {key: int(value) for key, value in stats.items()}
+    # )
+
+    # read - 714.38
+    # result = {}
+    # for key, value in stats.items():
+    #     await asyncio.sleep(0)
+    #     result[key] = int(value)
+    #
+    # return result
+
+    return {key: int(value) for key, value in stats.items()}
 
 @app.post("/v1/statistics")
 async def write_statistics(visit: Visit):

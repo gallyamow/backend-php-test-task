@@ -45,6 +45,6 @@ load-test-all: wrk-pull
 
 load-test:
 	@echo ">>> ============ WRITE $(port) ============ <<<"
-	$(wrkCommand) http://localhost:$(port)/v1/statistics
-	@echo ">>> ============ READ $(port) ============ <<<"
 	$(wrkCommand) -s ./tests/load/countries.lua http://localhost:$(port)/v1/statistics
+	@echo ">>> ============ READ $(port) ============ <<<"
+	$(wrkCommand) http://localhost:$(port)/v1/statistics

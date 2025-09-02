@@ -19,12 +19,9 @@ fastifyIndex.get('/', async function handler(request, reply) {
 fastifyIndex.get('/v1/statistics', async function handler(request, reply) {
     const stats = await redisClient.hgetall(redisStorageKey);
 
-    const result = {};
-    for (const [key, val] of Object.entries(stats)) {
-        result[key] = parseInt(val, 10)
-    }
-
-    return result
+    return Object.fromEntries(
+        Object.entries(stats).map(([key, val]) => [key, parseInt(val, 10)])
+    );
 })
 
 fastifyIndex.post('/v1/statistics', async function handler(request, reply) {
