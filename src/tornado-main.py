@@ -36,13 +36,14 @@ class StatisticsHandler(BaseHandler):
     async def get(self):
         stats = await async_redis.hgetall(REDIS_STORAGE_KEY)
 
-        # Оптимизированная обработка данных
+        # result = {key.decode('utf-8'): int(value) for key, value in stats.items()}
+
         result = {}
         for key, value in stats.items():
-            # Периодически отдаем управление event loop
             if len(result) % 100 == 0:
+                # optimization
                 await asyncio.sleep(0)
-            result[key] = int(value)
+            result[key.decode('utf-8')] = int(value)
 
         self.write(result)
 
@@ -52,7 +53,7 @@ class StatisticsHandler(BaseHandler):
 
         await async_redis.hincrby(REDIS_STORAGE_KEY, country_code, 1)
         self.set_status(201)
-        self.finish()
+        await self.finish()
 
 
 def make_app():
