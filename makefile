@@ -31,16 +31,16 @@ composer-update:
 unit-test:
 	docker compose run --rm app ./vendor/bin/phpunit --testdox tests
 
-load-test: load-test-post load-test-get
+load-test-all: load-test-post load-test-get
 
 wrk-pull:
 	docker pull $(wrkImage)
 
-load-test-post-last:
-	@echo ">>> ============ WRITE last ============ <<<"
-	$(wrkCommand) $(fastifyUrl)
-	@echo ">>> ============ READ last ============ <<<"
-	$(wrkCommand) -s ./tests/load/countries.lua $(fastifyUrl)
+load-test:
+	@echo ">>> ============ WRITE ============ <<<"
+	$(wrkCommand) http://localhost:$(port)/v1/statistics
+	@echo ">>> ============ READ ============ <<<"
+	$(wrkCommand) -s ./tests/load/countries.lua http://localhost:$(port)/v1/statistics
 
 load-test-post: wrk-pull
 	@echo ">>> ============ WRITE apache + mod_php ============ <<<"

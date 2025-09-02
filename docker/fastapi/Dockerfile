@@ -11,4 +11,4 @@ EXPOSE 8080
 
 # dev mode
 # CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "32"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "4", "--limit-concurrency", "100", "--timeout-keep-alive", "2", "--log-level", "warning"]

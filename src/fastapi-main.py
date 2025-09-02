@@ -3,6 +3,7 @@ from typing import Union
 from fastapi import FastAPI, Response, status
 from pydantic import BaseModel
 from redis import asyncio as aioredis
+from redis.asyncio.connection import ConnectionPool
 
 # @see https://fastapi.tiangolo.com/ru/#_4
 app = FastAPI()
@@ -12,7 +13,8 @@ REDIS_HOST = str(os.getenv("REDIS_HOST"))
 REDIS_PORT = int(os.getenv("REDIS_PORT"))
 REDIS_STORAGE_KEY = str(os.getenv("REDIS_STORAGE_KEY"))
 
-async_redis = aioredis.from_url("redis://%s:%d" % (REDIS_HOST, REDIS_PORT), max_connections=100)
+redis_pool = ConnectionPool.from_url("redis://%s:%d" % (REDIS_HOST, REDIS_PORT), max_connections=100)
+async_redis = aioredis.Redis(connection_pool=redis_pool)
 
 
 class Visit(BaseModel):

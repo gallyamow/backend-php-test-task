@@ -15,15 +15,15 @@ A microservice that records and exposes per-country usage statistics will be run
 
 This is not final results there are lack of some tuning.
 
-| Server         | WRITE     | READ      |
-|----------------|-----------|-----------|
-| apache+mod_php | 2670.65   | 2744.76   |
-| nginx+fpm      | 6694.33   | 5985.75   |
-| roadrunner     | 15363.60  | 13876.69  |
-| frankenphp     | 1962.47   | 2436.10   |
-| fastapi        | 6277.25   | 1724.79   |
-| gin-gonic      | 47063.31  | 45043.10  |
-| fastify        | 29821.35  | 20990.24  |
+| Server              | WRITE    | READ      |
+|---------------------|----------|-----------|
+| php: apache+mod_php | 2670.65  | 2744.76   |
+| php: nginx+fpm      | 6694.33  | 5985.75   |
+| php: roadrunner     | 15363.60 | 13876.69  |
+| php: frankenphp     | 1962.47  | 2436.10   |
+| python: fastapi     | 247.10   | 7634.92   |
+| golang: gin-gonic   | 47063.31 | 45043.10  |
+| nodejs: fastify     | 29821.35 | 20990.24  |
 
 ## USAGE
 
@@ -32,5 +32,7 @@ Build containers, install PHP dependencies, and start the stack:
 ```bash
 make up
 make unit-test
-make load-test
+make load-test-all
+# or
+make load-test port=...
 ```
